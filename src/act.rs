@@ -38,7 +38,6 @@ pub fn actions(command: &str, mut tasks: HashMap<String, bool>) -> HashMap<Strin
             println!("Saved successfully");
         }
         "show"|"s" => {
-            std::process::Command::new("clear").status().unwrap();
             println!("{:#?}", tasks);
         }
         "exit"|"q"|"e" => {
