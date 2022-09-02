@@ -3,12 +3,13 @@ mod complition;
 use complition::completeness;
 use crate::ToDo;
 
-pub fn actions(command: &str, mut tasks: HashMap<String, bool>) -> HashMap<String, bool>{
+pub fn actions(command: &str, mut tasks: HashMap<String, bool>) -> Result<HashMap<String, bool>,
+    Box<dyn std::error::Error>>{
     match command {
         "add"|"a" => {
             println!("Enter task:");
             let mut task = String::new();
-            io::stdin().read_line(&mut task);
+            io::stdin().read_line(&mut task)?;
             let task: String = task.trim().parse()
                 .expect("Error: unable to read user input");
             tasks.insert(task, completeness());
@@ -17,7 +18,7 @@ pub fn actions(command: &str, mut tasks: HashMap<String, bool>) -> HashMap<Strin
             println!("{:#?}", tasks);
             println!("Enter which task you want to delete");
             let mut task = String::new();
-            io::stdin().read_line(&mut task);
+            io::stdin().read_line(&mut task)?;
             let task: String = task.trim().parse()
                 .expect("Error: unable to read user input");
             tasks.remove(&*task);
@@ -26,7 +27,7 @@ pub fn actions(command: &str, mut tasks: HashMap<String, bool>) -> HashMap<Strin
             println!("{:#?}", tasks);
             println!("Enter which task you want update");
             let mut task = String::new();
-            io::stdin().read_line(&mut task);
+            io::stdin().read_line(&mut task)?;
             let task: String = task.trim().parse()
                 .expect("Error: unable to read user input");
             tasks.insert(task, completeness());
@@ -34,7 +35,7 @@ pub fn actions(command: &str, mut tasks: HashMap<String, bool>) -> HashMap<Strin
         "save" => {
             ToDo::save(ToDo{
                 tasks: tasks.clone(),
-            });
+            })?;
             println!("Saved successfully");
         }
         "show"|"s" => {
@@ -45,5 +46,5 @@ pub fn actions(command: &str, mut tasks: HashMap<String, bool>) -> HashMap<Strin
         }
         _ => println!("Unsupported command"),
     }
-    tasks
+    Ok(tasks)
 }
