@@ -1,12 +1,11 @@
 use std::{io, collections::HashMap, env};
 use serde_json;
-use gtk4 as gtk;
-use gtk::prelude::*;
-use gtk::{Application, ApplicationWindow};
 mod act;
 use act::actions;
-struct ToDo{
-    tasks: HashMap<String, bool>,
+mod gui;
+use gui::gui;
+pub struct ToDo{
+    pub tasks: HashMap<String, bool>,
 }
 impl ToDo {
     fn new() -> Result<ToDo, std::io::Error> {
@@ -47,21 +46,6 @@ fn main(){
         }
     }
     else{
-        let app = Application::builder()
-            .application_id("org.ToDo")
-            .build();
-
-        app.connect_activate(|app| {
-            let win = ApplicationWindow::builder()
-                .application(app)
-                .default_height(600)
-                .default_width(800)
-                .title("ToDo")
-                .build();
-            
-                win.show();
-
-        });
-        app.run();
+        gui(&mut todo);
     }
 }
