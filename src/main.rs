@@ -1,3 +1,4 @@
+#![windows_subsystem = "windows"]
 use std::{io, collections::HashMap, env, fs};
 use serde_json;
 mod act;
@@ -36,6 +37,7 @@ impl ToDo{
         HashMap::<String, bool>::new()
     }
 }
+
 fn main(){
 
     let arguments: String = env::args().collect();
