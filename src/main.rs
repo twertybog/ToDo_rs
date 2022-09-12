@@ -1,13 +1,14 @@
-use std::{io, collections::HashMap, env};
+use std::{io, collections::HashMap, env, fs};
 use serde_json;
 mod act;
 use act::actions;
 mod gui;
 use gui::gui;
+
 pub struct ToDo{
     pub tasks: HashMap<String, bool>,
 }
-impl ToDo {
+impl ToDo{
     fn new() -> Result<ToDo, std::io::Error> {
         let f = std::fs::OpenOptions::new()
             .write(true)
@@ -23,6 +24,7 @@ impl ToDo {
         }
     }
     pub fn save(self) -> Result<(), Box<dyn std::error::Error>> {
+        fs::remove_file("db.json")?;
         let f = std::fs::OpenOptions::new()
             .write(true)
             .create(true)
@@ -30,12 +32,15 @@ impl ToDo {
         serde_json::to_writer_pretty(f, &self.tasks)?;
         Ok(())
     }
+    pub fn remove_all() -> HashMap<String, bool>{
+        HashMap::<String, bool>::new()
+    }
 }
 fn main(){
 
     let arguments: String = env::args().collect();
-    let mut todo = ToDo::new().expect("Initialisation of db failed");
     if arguments.contains("--cli"){
+        let mut todo = ToDo::new().expect("Initialisation of db failed");
         loop {
             println!("Enter command (add/remove/update/show/save/exit): ");
             let mut command = String::new();
@@ -46,6 +51,6 @@ fn main(){
         }
     }
     else{
-        gui(&mut todo);
+        gui();
     }
 }

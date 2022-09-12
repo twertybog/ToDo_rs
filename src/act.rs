@@ -12,7 +12,7 @@ pub fn actions(command: &str, mut tasks: HashMap<String, bool>) -> Result<HashMa
             io::stdin().read_line(&mut task)?;
             let task: String = task.trim().parse()
                 .expect("Error: unable to read user input");
-            tasks.insert(task, completeness());
+            tasks.insert(task, false);
         }
         "remove"|"r" => {
             println!("{:#?}", tasks);
