@@ -1,7 +1,22 @@
 [package]
-name = "cli_to_do_rs"
-version = "0.1.0"
+name = "to_do"
+authors = ["twertybog"]
+version = "0.2.0"
 edition = "2021"
 
 [dependencies]
-serde_json = "1.0.78"
+serde_json = "1.0.85"
+fltk = "1.3.15"
+
+[profile.dev]
+lto = false
+opt-level = 0
+
+
+[profile.release]
+strip = true
+lto = true
+opt-level = "z"
+codegen-units = 1
+
+
